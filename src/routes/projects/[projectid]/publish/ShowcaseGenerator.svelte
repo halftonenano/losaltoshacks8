@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button';
+	import { Button, buttonVariants } from '$lib/components/ui/button';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import { Label } from '$lib/components/ui/label';
-	import Download from 'lucide-svelte/icons/download';
 	import { toPng } from 'html-to-image';
+	import Download from 'lucide-svelte/icons/download';
+	import Image from 'lucide-svelte/icons/image';
 	import { nanoid } from 'nanoid/non-secure';
 
 	let text = 'Project Title';
@@ -29,6 +29,17 @@
 
 <div>
 	<div class="flex gap-3">
+		<div>
+			<label
+				for="file-upload"
+				class={buttonVariants({ variant: 'outline', class: 'cursor-pointer' })}
+			>
+				<Image class="w-4 mr-2" />
+				Select Photo
+			</label>
+			<input id="file-upload" type="file" accept="image/*" bind:files={images} />
+		</div>
+
 		<Input placeholder="Text goes here" bind:value={text} />
 		<input type="color" bind:value={start} />
 		<input type="color" bind:value={end} />
@@ -45,10 +56,6 @@
 			Download as PNG
 		</Button>
 	</div>
-	<div class="grid w-full max-w-sm items-center gap-1.5">
-		<Label for="picture">Picture</Label>
-		<input type="file" bind:files={images} />
-	</div>
 
 	<div
 		bind:this={element}
@@ -58,11 +65,11 @@
 		<div class="text-white font-bold text-5xl opacity-65 mb-16">{text}</div>
 		{#if imageUrl !== ''}
 			<img class="rounded-md mx-auto w-[600px] font-bold text-5xl rotated" src={imageUrl} alt="" />
-			{:else}
+		{:else}
 			<div
 				class="bg-white rounded-md mx-auto w-[600px] aspect-video shadow-xl text-blue-600 font-bold text-5xl rotated"
 			>
-				cool placeholder image here
+				placeholder image
 			</div>
 		{/if}
 	</div>
@@ -76,6 +83,7 @@
 		perspective: 900px;
 	}
 
-	:root {
+	input[type='file'] {
+		display: none;
 	}
 </style>

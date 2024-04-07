@@ -10,6 +10,8 @@
 	import { onMount } from 'svelte';
 	import * as Y from 'yjs';
 	import './Editor.css';
+	import { user } from '$lib/pocketbase';
+	import { nanoid } from 'nanoid/non-secure';
 
 	export let docid: string;
 
@@ -35,29 +37,30 @@
 		// Prepopulate the text editor with some initial content
 		const yProvider = new LiveblocksProvider(room, yDoc);
 
-    editor = new Editor({
-      element,
-      extensions: [
-        StarterKit.configure({
-          // The Collaboration extension comes with its own history handling
-          history: false
-        }),
-        // Register the Yjs document with Tiptap
-        Collaboration.configure({
-          document: yDoc
-        }),
-        CollaborationCursor.configure({
-          provider: yProvider
-        }),
-        Placeholder.configure({
-          emptyEditorClass: 'is-editor-empty'
-        })
-      ],
-      onTransaction: () => {
-        // Force re-render so `editor.isActive` works as expected
-        editor = editor;
-      }
-    });
+		editor = new Editor({
+			element,
+			extensions: [
+				StarterKit.configure({
+					// The Collaboration extension comes with its own history handling
+					history: false
+				}),
+				// Register the Yjs document with Tiptap
+				Collaboration.configure({
+					document: yDoc
+				}),
+				CollaborationCursor.configure({
+					provider: yProvider,
+					user: { name: $user?.name || nanoid(5) }
+				}),
+				Placeholder.configure({
+					emptyEditorClass: 'is-editor-empty'
+				})
+			],
+			onTransaction: () => {
+				// Force re-render so `editor.isActive` works as expected
+				editor = editor;
+			}
+		});
 
 		return () => {
 			editor?.destroy();
