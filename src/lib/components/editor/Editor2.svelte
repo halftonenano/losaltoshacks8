@@ -10,6 +10,8 @@
 	import { onMount } from 'svelte';
 	import * as Y from 'yjs';
 	import './Editor.css';
+	import { user } from '$lib/pocketbase';
+	import { nanoid } from 'nanoid/non-secure';
 
 	export let docid: string;
 
@@ -45,7 +47,8 @@
           document: yDoc
         }),
         CollaborationCursor.configure({
-          provider: yProvider
+          provider: yProvider,
+					user: { name: $user?.name || nanoid(5) }
         }),
         Placeholder.configure({
           emptyEditorClass: 'is-editor-empty'

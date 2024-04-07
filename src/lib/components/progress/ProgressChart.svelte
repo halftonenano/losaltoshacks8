@@ -25,9 +25,6 @@
 			series.total.push(data.total);
 		}
 		series = series;
-		// pb.collection('snapshots').subscribe('*', async function(e) {
-		//   e.
-		// })
 	});
 
 	$: options = {
@@ -44,7 +41,6 @@
 		},
 		yAxis: {
 			type: 'value',
-			max: $sync.tasks.length,
 			show: false
 		},
 		series: [
